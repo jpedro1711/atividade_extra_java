@@ -2,14 +2,14 @@ import java.util.ArrayList;
 
 public class Pedido {
     private Cliente cliente;
-    private ArrayList<Item> items;
+    private ArrayList<Alimento> items;
 
     public Pedido(Cliente cliente) {
         this.cliente = cliente;
         items = new ArrayList<>();
     }
 
-    public void adicionarAoPedido(Item i) {
+    public void adicionarAoPedido(Alimento i) {
         this.items.add(i);
     }
 
@@ -18,14 +18,14 @@ public class Pedido {
     }
 
     public void showItems() {
-        for (Item i: items) {
+        for (Alimento i: items) {
             System.out.println(i.getNome() + " - " + i.getPreco());
         }
     }
 
     public double taxService() {
         double valorTotal = 0;
-        for (Item i: items) {
+        for (Alimento i: items) {
             valorTotal += i.getPreco();
         }
         return (valorTotal * 0.1);
@@ -33,7 +33,7 @@ public class Pedido {
 
     public double valorTotal() {
         double valorTotal = 0;
-        for (Item i: items) {
+        for (Alimento i: items) {
             valorTotal += i.getPreco();
         }
         return valorTotal * 1.1;

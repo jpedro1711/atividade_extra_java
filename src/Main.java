@@ -1,18 +1,21 @@
-import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
         Locale.setDefault(Locale.US);
+        Scanner sc = new Scanner(System.in);
 
-        Item cocaCola = new Item("Coca-cola", 5.99);
-        Item macarrao = new Item("Macarrão", 30.99);
+        Alimento coca = new Bebida("Coca-cola", 5.99, 1);
+        Alimento agua = new Bebida("Água sem gás", 3.00, 0.5);
+        Alimento ravioli = new Prato("Ravioli", 55.99, 2);
+        Alimento macarrao = new Prato("Macarrão", 30.99, 1);
 
         Cardapio cardapio = new Cardapio();
-        cardapio.addItem(cocaCola);
+        cardapio.addItem(coca);
+        cardapio.addItem(ravioli);
+        cardapio.addItem(agua);
         cardapio.addItem(macarrao);
 
         int opcao = 0;
@@ -24,7 +27,7 @@ public class Main {
                 opcao = sc.nextInt();
             } catch (InputMismatchException e) {
                 System.out.println("Você deve digitar o número correspondente a opção desejada");
-                opcao = sc.nextInt();
+                sc.next();
             }
 
             if (opcao == 2) {
@@ -39,18 +42,23 @@ public class Main {
                 cardapio.exibirCardapio();
                 Pedido p = new Pedido(c);
                 boolean finished = false;
-                while (finished == false) {
+                while (!finished) {
                     System.out.println("Digite o número do item para adicionar ao pedido: (Caso deseje encerrar digite 0)");
-                    int item = sc.nextInt();
-                    if (item == 0) {
-                        finished = true;
-                    } else {
-                        try {
-                            p.adicionarAoPedido(cardapio.getItem(item - 1));
-                        } catch (IndexOutOfBoundsException e) {
-                            System.out.println("Opção inválida!");
+                    try {
+                        int item = sc.nextInt();
+                        if (item == 0) {
+                            finished = true;
+                        } else {
+                            try {
+                                p.adicionarAoPedido((Alimento) cardapio.getItem(item - 1));
+                            } catch (IndexOutOfBoundsException e) {
+                                System.out.println("Opção inválida!");
+                            }
+                            System.out.println("Item adicionado ao pedido: " + cardapio.getItem(item - 1).getNome());
                         }
-                        System.out.println("Item adicionado ao pedido: " + cardapio.getItem(item - 1).getNome());
+                    } catch (InputMismatchException e) {
+                        System.out.println("Você deve digitar o número correspondente a opção desejada");
+                        sc.next();
                     }
                 }
 
@@ -62,9 +70,15 @@ public class Main {
                 System.out.println("Valor total do pedido: " + String.format("%.2f", p.valorTotal()));
 
                 System.out.println("Digite um valor para pagamento: ");
-                double valorPago = sc.nextDouble();
-                System.out.println("Troco: " + (String.format("%.2f", valorPago - p.valorTotal())));
-                opcao = 0;
+                double valorPago;
+                try {
+                    valorPago = sc.nextDouble();
+                    System.out.println("Troco: " + (String.format("%.2f", valorPago - p.valorTotal())));
+                    opcao = 0;
+                } catch (InputMismatchException e) {
+                    System.out.println("Valor para pagamento inválido");
+                    sc.next();
+                }
             }
         }
 

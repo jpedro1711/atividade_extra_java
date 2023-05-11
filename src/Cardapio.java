@@ -1,14 +1,14 @@
 import java.util.ArrayList;
 
 public class Cardapio {
-    private ArrayList<Item> items;
+    private ArrayList<Alimento> items;
 
     public Cardapio() {
         this.items = new ArrayList<>();
     }
 
-    public void addItem(Item item) {
-        this.items.add(item);
+    public void addItem(Alimento alimento) {
+        this.items.add(alimento);
     }
 
     public Item getItem(int i) {
